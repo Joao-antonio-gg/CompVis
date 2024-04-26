@@ -3,8 +3,8 @@ import shutil
 import os
 import sys
 
-INPUT_DIR = 'crawled1'
-OUTPUT_BASE = 'labeled1'
+INPUT_DIR = 'crawled2'
+OUTPUT_BASE = 'labeled2'
 WINDOW_NAME = 'disjuntor? (y/*)'
 
 MAX_HEIGHT = 500
