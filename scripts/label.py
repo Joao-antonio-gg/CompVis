@@ -3,9 +3,9 @@ import shutil
 import os
 import sys
 
-INPUT_DIR = 'crawled2'
-OUTPUT_BASE = 'labeled2'
-WINDOW_NAME = 'disjuntor? (y/*)'
+INPUT_DIR = 'crawled3'
+OUTPUT_BASE = 'labeled1'
+WINDOW_NAME = 'chave? (y/*)'
 
 MAX_HEIGHT = 500
 MAX_WIDTH = 500
@@ -13,7 +13,7 @@ MAX_WIDTH = 500
 def main():
     cv.namedWindow(WINDOW_NAME)
 
-    output_dir = os.path.join(OUTPUT_BASE, 'disjuntor')
+    output_dir = os.path.join(OUTPUT_BASE, 'chave')
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
