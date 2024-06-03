@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title >Factory Security</title>
+        <style>
+            body {
+                text-align: center;
+            }
+            .ima {
+                max-width: 400px;
+                max-height: 400px;
+            }
+            .linha{
+                display: inline-block;
+            }
+            .im{
+                max-width: 25px;
+                max-height: 25px;
+            }
+            .box{
+                display: inline-block;
+                margin: 10px;
+                
+            }
+        </style>
+    </head>
+    <body>
+        <h1 >Imagem Carregada</h1>
+        <img class="ima" src="{{ url_for('send_file', filename=filename) }}" alt="Uploaded Image">
+        <br>
+        <p>Result: {{ result }}</p> <!-- Aqui você acessa o result_f -->
+        <br>
+        <p>Locks:</p>
+        <div class="">
+            {% for item in travas %}
+            <li class="linha">
+                <img class="ima" src="{{ url_for('send_file', filename=item + '.jpg') }}" alt="Uploaded Image">
+            </li>
+            {% endfor %}
+            <p>
+                <a href="/">Upload outra imagem</a>
+            </p>
+        </div>
+    </body>
+</html>

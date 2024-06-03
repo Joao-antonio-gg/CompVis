@@ -2,5 +2,5 @@ import sys
 
 from icrawler.builtin import GoogleImageCrawler,BingImageCrawler
 
-google_crawler = BingImageCrawler(storage={'root_dir': 'crawled6'})
-google_crawler.crawl(keyword='Chave Seccionadora Rotativa', max_num=1000)
+google_crawler = GoogleImageCrawler(storage={'root_dir': 'crawled8'})
+google_crawler.crawl(keyword='valvula borboleta', max_num=1000)
