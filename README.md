@@ -10,7 +10,7 @@ Para fazer o site foi usado o flask.
 
 
 ## Para instalar as dependencias:
-    Com o projeto instalado é só rodar o codigo abaixo no terminal para instalar as dependencias
+Com o projeto instalado é só rodar o codigo abaixo no terminal para instalar as dependencias
 
     pip install -r dependencies.txt
 
