@@ -19,9 +19,45 @@ def allowed_file(filename):
         filename (str): O nome do arquivo a ser verificado.
 
     Returns:
-        bool: True se a extensão do arquivo é permitida, False caso contrário.
+        bool: True se a extensão do arquivo estiver na lista de extensões permitidas, False caso contrário.
     """
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return ('.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS)
+
+def save_file(file):
+    """
+    Salva o arquivo enviado pelo usuário no diretório de upload.
+
+    Args:
+        file (FileStorage): O arquivo a ser salvo.
+
+    Returns:
+        tuple: O caminho completo do arquivo e o nome do arquivo.
+    """
+    filename = secure_filename(file.filename)
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(filepath)
+    return filepath, filename
+
+def process_image(filepath):
+    """
+    Processa a imagem usando o modelo YOLO e retorna a classe prevista.
+
+    A imagem é processada pelo modelo YOLO, que retorna uma lista de probabilidades para cada classe. 
+    A função então retorna a classe com a maior probabilidade.
+
+    Args:
+        filepath (str): O caminho para o arquivo de imagem a ser processado.
+
+    Returns:
+        str: A classe prevista para a imagem.
+    """
+    result = model(filepath)
+    names = result[0].names
+    probs = result[0].probs.data.numpy()
+    predicted_class = names[numpy.argmax(probs)]
+    return predicted_class
+
+
 
 @app.route('/')
 def upload_form():
@@ -49,21 +85,16 @@ def upload_file():
     if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']
-    if file.filename == '':
-        return redirect(request.url)
-    if file and allowed_file(file.filename): # Verifica se o arquivo é permitido
-        filename = secure_filename(file.filename) # Garante que o nome do arquivo é seguro
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename)) # Salva o arquivo
-        #pehar a imagem 
-        image = 'image/' + filename
-        result = model(image)
-        name = result[0].names
-        probs = result[0].probs.data.numpy()
-        result_f = (name[numpy.argmax(probs)])
+    if not file or file.filename == '':
+        return redirect(request.url)  
+    if allowed_file(file.filename):
+        filepath, filename = save_file(file)
+        predicted_class = process_image(filepath)
         travas = ['cadeado','etiqueta']
-        if result_f != 'chave':
-            travas.append(result_f)
-        return render_template('display_image.html', filename=filename, result=result_f, travas=travas)
+        if predicted_class != 'chave':
+            travas.append(predicted_class)
+
+        return render_template('display_image.html', filename=filename, result=predicted_class, travas=travas)
     return redirect(request.url)
 
 @app.route('/image/<filename>')
