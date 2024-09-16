@@ -58,12 +58,30 @@ def process_image(filepath):
     return predicted_class
 
 
+
 @app.route('/')
 def upload_form():
+    """
+    Função que retorna o formulário de upload para a rota raiz ("/").
+    """
     return render_template('upload.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    """
+    Função para lidar com o upload de arquivos.
+
+    Esta função é responsável por receber uma requisição POST contendo um arquivo e realizar o upload do mesmo. 
+    O arquivo é salvo em uma pasta específica e, em seguida, é feita uma análise do conteúdo do arquivo utilizando um modelo de visão computacional.
+    O resultado da análise é utilizado para determinar se o arquivo contém uma imagem de uma chave ou de uma trava. Caso seja identificado como uma trava, o tipo de trava é adicionado a uma lista de travas.
+    Por fim, é renderizado um template HTML que exibe a imagem, o resultado da análise e a lista de travas.
+
+    Parâmetros:
+        - Nenhum parâmetro é necessário.
+
+    Retorno:
+        - Nenhum valor é retornado explicitamente, mas a função realiza o upload do arquivo e renderiza um template HTML.
+    """
     if 'file' not in request.files:
         return redirect(request.url)
     file = request.files['file']
@@ -79,12 +97,34 @@ def upload_file():
         return render_template('display_image.html', filename=filename, result=predicted_class, travas=travas)
     return redirect(request.url)
 
-@app.route('/image/<filename>') # Rota para servir arquivos da pasta de uploads
+@app.route('/image/<filename>')
 def send_file(filename):
+    '''
+    Função que retorna um arquivo da pasta de uploads.
+
+    Parâmetros:
+    - filename (str): O nome do arquivo a ser retornado.
+
+    Retorno:
+    - O arquivo especificado pelo nome na pasta de uploads.
+
+    Exemplo de uso:
+        send_file('imagem.jpg')
+    '''
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/display/<filename>') # Rota para exibir a imagem
+@app.route('/display/<filename>')
 def uploaded_file(filename):
+    """
+    Rota para exibir uma imagem.
+
+    Parâmetros:
+    - filename (str): O nome do arquivo da imagem a ser exibida.
+
+    Retorno:
+    - render_template: O template HTML para exibir a imagem.
+
+    """
     return render_template('display_image.html', filename=filename)
 
 if __name__ == "__main__":
